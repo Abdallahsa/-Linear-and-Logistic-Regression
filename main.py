@@ -28,3 +28,11 @@ print("************************************************")
 # Creating a pair plot using the scaled numerical data
 sns.pairplot(scaled_data.dropna())  # Use the scaled data for the pair plot and drop rows with NaN values
 plt.savefig('pairplot.png')  # Save the plot as an image
+
+# Removing records with missing values
+data_without_missing = data.dropna()
+
+# Display the number of missing values after removing records
+print("\nNumber of missing values after removing records:")
+print (data_without_missing)
+print(data_without_missing.isnull().sum())
