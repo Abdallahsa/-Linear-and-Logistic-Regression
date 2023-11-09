@@ -35,4 +35,19 @@ data_without_missing = data.dropna()
 # Display the number of missing values after removing records
 print("\nNumber of missing values after removing records:")
 print (data_without_missing)
+print ("***************************")
 print(data_without_missing.isnull().sum())
+print ("***************************")
+
+
+
+# Separate features and target columns
+features = data_without_missing.drop(['Max_Loan_Amount', 'Loan_Status'], axis=1)
+targets = data_without_missing[['Max_Loan_Amount', 'Loan_Status']]
+
+# Display the first few rows of the features and targets datasets
+print("\nFeatures:")
+print(features.head())
+
+print("\nTargets:")
+print(targets.head())
