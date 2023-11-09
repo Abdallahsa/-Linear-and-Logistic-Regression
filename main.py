@@ -1,9 +1,14 @@
+import warnings
+
 import matplotlib
+from sklearn.exceptions import DataConversionWarning
+
 matplotlib.use('Agg')  # Set the backend to 'Agg' (non-interactive)
 import seaborn as sns
 import pandas as pd
 import matplotlib.pyplot as plt  # Importing pyplot from Matplotlib
 from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
 # Load the dataset
 file_path = "loan_old.csv"  # Make sure to provide the correct file path
 data = pd.read_csv(file_path)
@@ -53,11 +58,19 @@ print("\nTargets:")
 print(targets.head())
 
 
-# Split the data into training and testing sets
-# Use 80% of the data for training and 20% for testing
-# Set a random_state for reproducibility
-X_train, X_test, y_train, y_test = train_test_split(features, targets, test_size=0.2, random_state=42)
+warnings.filterwarnings("ignore", category=DataConversionWarning)
+# One-hot encode categorical features
+features_encoded = pd.get_dummies(features)
 
-# Display the shapes of the training and testing sets
+targets_encoded = pd.get_dummies(targets)
+# Standardize numerical features
+numerical_columns = features.select_dtypes(include=['int64', 'float64']).columns
+scaler = StandardScaler()
+features_encoded[numerical_columns] = scaler.fit_transform(features_encoded[numerical_columns])
+
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(features_encoded, targets_encoded, test_size=0.2, random_state=42)
+
+# Display the shapes of the training and testing sets after encoding and standardizing
 print("Training set - Features:", X_train.shape, "Targets:", y_train.shape)
 print("Testing set - Features:", X_test.shape, "Targets:", y_test.shape)
